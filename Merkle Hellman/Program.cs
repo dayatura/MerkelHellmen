@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Merkle_Hellman
 {
@@ -53,8 +54,13 @@ namespace Merkle_Hellman
             string input;
             List<int> output;
             string outputText = "";
-            Console.Write("Masukan Kalimat\t: ");
-            input = Console.ReadLine();
+            //Console.Write("Masukan Kalimat\t: ");\
+            Console.Write("Masukan nama File\t: ");
+            string path = Console.ReadLine();
+            TextReader tr = new StreamReader(path);
+            input = tr.ReadLine();
+            //input = Console.ReadLine();
+            Console.WriteLine("PlainText: " + input);
             Console.Write("Jumlah Key\t: ");
             jumlah = int.Parse(Console.ReadLine());
             for (int i = 0; i < jumlah; i++)
@@ -64,12 +70,11 @@ namespace Merkle_Hellman
                 publicKey.Add(temp);
             }
             output = SuperIncreasing.Encryption(input, publicKey);
-            outputText = "( ";
+            outputText = "";
             foreach (int item in output)
             {
                 outputText = outputText + item + " ";
             }
-            outputText = outputText + ")";
             return outputText;
         }
         public static string Decrypt()
@@ -81,6 +86,22 @@ namespace Merkle_Hellman
             List<int> privateKey = new List<int>();
             List<int> input = new List<int>();
             string output;
+            //TextReader tr = new StreamReader("cipher.txt");
+            //string inputc = tr.ReadLine();
+            //tr.Close();
+            //Console.WriteLine("Cipher text: " + inputc);
+            //List<string> words = new List<string>(inputc.Split(' '));
+            //foreach (string word in words)
+            //{
+            //    string tempppp = "";
+            //    foreach (char c in word)
+            //    {
+            //        tempppp = tempppp + c;
+            //    }
+            //    Console.Write(word);
+            //    int temps = int.Parse(tempppp);
+            //    input.Add(temps);
+            //}
             Console.Write("Jumlah Cipher\t: ");
             jumlah = int.Parse(Console.ReadLine());
             for (int i = 0; i < jumlah; i++)
@@ -108,6 +129,7 @@ namespace Merkle_Hellman
         {
             int pilih;
             int jumlahKey;
+            string cipherText;
             SuperIncreasing generated;
             do
             {
@@ -132,7 +154,11 @@ namespace Merkle_Hellman
                         Console.WriteLine(generated.ToString());
                         break;
                     case 3:
-                        Console.WriteLine("Encrypted\t: " + Encrypt());
+                        cipherText = Encrypt();
+                        Console.WriteLine("Encrypted\t: " + cipherText);
+                        TextWriter tw = new StreamWriter("cipher.txt");
+                        tw.WriteLine(cipherText);
+                        tw.Close();
                         break;
                     case 4:
                         Console.WriteLine("Decrypted\t: " + Decrypt());
